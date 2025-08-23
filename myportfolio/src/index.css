@@ -108,6 +108,18 @@
       hsla(210, 100%, 60%, 0.1));
   }
   
+  @media (max-width: 640px) {
+    .desktop-icon {
+      padding: 1.25rem; /* reduce padding */
+      min-width: 100px;
+    }
+    
+    .desktop-icon svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
   .desktop-icon:hover {
     box-shadow: var(--shadow-glow);
     transform: translateY(-4px) scale(1.05);
