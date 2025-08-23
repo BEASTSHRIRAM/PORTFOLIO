@@ -6,10 +6,10 @@ interface DockProps {
 
 export const Dock = ({ openWindows }: DockProps) => {
 const dockItems = [
-    { id: 'github', icon: Github, href: 'https://github.com', label: 'GitHub', color: '#333' },
-    { id: 'linkedin', icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn', color: '#0077b5' },
-    { id: 'email', icon: Mail, href: 'mailto:john@example.com', label: 'Email', color: '#ea4335' },
-    { id: 'resume', icon: ExternalLink, href: '#', label: 'Resume', color: '#6366f1' },
+    { id: 'github', icon: Github, href: 'https://github.com/BEASTSHRIRAM', label: 'GitHub', color: '#333' },
+    { id: 'linkedin', icon: Linkedin, href: 'https://linkedin.com/in/shriram-kulkarni-033b8328a', label: 'LinkedIn', color: '#0077b5' },
+    { id: 'email', icon: Mail, href: 'mailto:shrikulk20@gmail.com', label: 'Email', color: '#ea4335' },
+    { id: 'resume', icon: ExternalLink, href: '#', label: 'https://drive.google.com/file/d/1H4X-AazOrSGwJyb5X68blohyWTGxmAx8/view?usp=sharing', color: '#6366f1' },
   ];
 
   const handleDockClick = (href: string) => {
