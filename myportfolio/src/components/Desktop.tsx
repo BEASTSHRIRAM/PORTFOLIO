@@ -33,7 +33,6 @@ export const Desktop = () => {
   const openWindow = useCallback((windowId: string, title: string, component: JSX.Element) => {
     const existingWindow = openWindows.find(w => w.id === windowId);
     if (existingWindow) {
-      // Bring existing window to front
       setOpenWindows(prev => [
         ...prev.filter(w => w.id !== windowId),
         existingWindow
@@ -50,7 +49,7 @@ export const Desktop = () => {
         y: 50 + openWindows.length * 40 
       },
       size: { width: 800, height: 600 },
-      isMaximized: false
+      isMaximized: true 
     };
 
     setOpenWindows(prev => [...prev, newWindow]);
@@ -67,8 +66,6 @@ export const Desktop = () => {
   }, []);
 
   const minimizeWindow = useCallback((windowId: string) => {
-    // For now, just close the window. In a real implementation, 
-    // you might want to hide it and show it in the dock
     closeWindow(windowId);
   }, [closeWindow]);
 
@@ -114,7 +111,6 @@ export const Desktop = () => {
         backgroundColor: '#1a1b1e'
       }}
     >
-      {/* Wallpaper with overlay */}
       <div 
         className="fixed inset-0 z-0"
         style={{
@@ -124,18 +120,32 @@ export const Desktop = () => {
           opacity: 0.7
         }}
       />
-      {/* Dark gradient overlay */}
       <div 
         className="fixed inset-0 z-0 bg-gradient-to-b from-background/40 via-background/20 to-background/40"
       />
-      {/* Desktop overlay for glassmorphism effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-background/20 via-transparent to-background/30"></div>
-      
-      {/* Desktop Icons - Hidden on mobile when windows are open */}
-      <div className={`relative z-10 p-4 md:p-8 transition-opacity duration-300 ${
-        openWindows.length > 0 ? 'md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto' : 'opacity-100'
-      }`}>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 max-w-4xl">
+      <div
+        className={`relative z-10 p-4 md:p-8 transition-opacity duration-300 ${
+          openWindows.length > 0 ? 'md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto' : 'opacity-100'
+        }`}
+      >
+        <div className="hidden md:flex flex-col items-center w-full">
+          <div style={{ height: '90px' }} />
+          <div className="flex justify-center w-full">
+            <div className="grid grid-cols-4 gap-6 max-w-4xl">
+              {desktopApps.map(app => (
+                <DesktopIcon
+                  key={app.id}
+                  icon={app.icon}
+                  label={app.label}
+                  colorClass={app.colorClass}
+                  onClick={() => openWindow(app.id, app.label, app.component)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="md:hidden grid grid-cols-2 gap-4 max-w-4xl">
           {desktopApps.map(app => (
             <DesktopIcon
               key={app.id}
@@ -146,27 +156,19 @@ export const Desktop = () => {
             />
           ))}
         </div>
-      </div>
-
-      {/* Mobile App List - Shows when no windows are open */}
+      </div>}
       <div className={`md:hidden fixed inset-0 z-20 transition-opacity duration-300 ${
         openWindows.length === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}>
-        {/* Mobile Home Screen */}
         <div className="min-h-screen flex flex-col bg-background/60 backdrop-blur-md">
-          {/* Status Bar */}
           <div className="bg-background/40 backdrop-blur-sm md:hidden">
             <LiveClock />
           </div>
-
-          {/* User Info Section */}
           <div className="px-6 py-4 text-center">
             <h1 className="text-xl font-bold mb-1">Shriram Kulkarni</h1>
             <p className="text-primary text-sm">Full Stack Developer & AI Enthusiast</p>
             <p className="text-xs opacity-80 mt-1">Building Scalable AI-Driven Solutions</p>
           </div>
-
-          {/* Apps Grid */}
           <div className="flex-1 px-4 py-6">
             <div className="grid grid-cols-4 gap-y-6 max-w-md mx-auto">
               {desktopApps.map(app => (
@@ -183,8 +185,6 @@ export const Desktop = () => {
               ))}
             </div>
           </div>
-
-          {/* Bottom Dock */}
           <div className="w-full px-6 pb-8 fixed bottom-0 left-0">
             <div className="glass-hover rounded-2xl p-3 mx-auto max-w-xs flex justify-center items-center gap-8">
               <a 
@@ -213,13 +213,10 @@ export const Desktop = () => {
           </div>
         </div>
       </div>
-
-      {/* Open Windows */}
       {openWindows.map(window => (
         <div
           key={window.id}
           className={`${
-            // On mobile, windows are fullscreen
             'md:relative fixed md:inset-auto inset-0 z-30'
           }`}
         >
@@ -238,12 +235,10 @@ export const Desktop = () => {
       ))}
 
 
-      {/* Live Clock - Only show on desktop */}
       <div className="hidden md:block">
         <LiveClock />
       </div>
 
-      {/* Dock */}
       <Dock openWindows={openWindows.map(w => w.id)} />
     </div>
   );
