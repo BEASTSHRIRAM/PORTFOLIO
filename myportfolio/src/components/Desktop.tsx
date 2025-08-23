@@ -33,6 +33,7 @@ export const Desktop = () => {
   const openWindow = useCallback((windowId: string, title: string, component: JSX.Element) => {
     const existingWindow = openWindows.find(w => w.id === windowId);
     if (existingWindow) {
+      
       setOpenWindows(prev => [
         ...prev.filter(w => w.id !== windowId),
         existingWindow
@@ -49,7 +50,7 @@ export const Desktop = () => {
         y: 50 + openWindows.length * 40 
       },
       size: { width: 800, height: 600 },
-      isMaximized: true 
+      isMaximized: true // Open fullscreen by default
     };
 
     setOpenWindows(prev => [...prev, newWindow]);
@@ -66,6 +67,7 @@ export const Desktop = () => {
   }, []);
 
   const minimizeWindow = useCallback((windowId: string) => {
+    
     closeWindow(windowId);
   }, [closeWindow]);
 
@@ -111,6 +113,7 @@ export const Desktop = () => {
         backgroundColor: '#1a1b1e'
       }}
     >
+      
       <div 
         className="fixed inset-0 z-0"
         style={{
@@ -120,16 +123,21 @@ export const Desktop = () => {
           opacity: 0.7
         }}
       />
+      
       <div 
         className="fixed inset-0 z-0 bg-gradient-to-b from-background/40 via-background/20 to-background/40"
       />
+      
       <div className="absolute inset-0 bg-gradient-to-br from-background/20 via-transparent to-background/30"></div>
+      
+      
       <div
         className={`relative z-10 p-4 md:p-8 transition-opacity duration-300 ${
           openWindows.length > 0 ? 'md:opacity-100 opacity-0 pointer-events-none md:pointer-events-auto' : 'opacity-100'
         }`}
       >
         <div className="hidden md:flex flex-col items-center w-full">
+          
           <div style={{ height: '90px' }} />
           <div className="flex justify-center w-full">
             <div className="grid grid-cols-4 gap-6 max-w-4xl">
@@ -145,6 +153,7 @@ export const Desktop = () => {
             </div>
           </div>
         </div>
+        
         <div className="md:hidden grid grid-cols-2 gap-4 max-w-4xl">
           {desktopApps.map(app => (
             <DesktopIcon
@@ -156,19 +165,27 @@ export const Desktop = () => {
             />
           ))}
         </div>
-      </div>}
+      </div>
+
+      
       <div className={`md:hidden fixed inset-0 z-20 transition-opacity duration-300 ${
         openWindows.length === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}>
+        
         <div className="min-h-screen flex flex-col bg-background/60 backdrop-blur-md">
+          
           <div className="bg-background/40 backdrop-blur-sm md:hidden">
             <LiveClock />
           </div>
+
+          
           <div className="px-6 py-4 text-center">
             <h1 className="text-xl font-bold mb-1">Shriram Kulkarni</h1>
             <p className="text-primary text-sm">Full Stack Developer & AI Enthusiast</p>
             <p className="text-xs opacity-80 mt-1">Building Scalable AI-Driven Solutions</p>
           </div>
+
+          
           <div className="flex-1 px-4 py-6">
             <div className="grid grid-cols-4 gap-y-6 max-w-md mx-auto">
               {desktopApps.map(app => (
@@ -185,6 +202,8 @@ export const Desktop = () => {
               ))}
             </div>
           </div>
+
+          
           <div className="w-full px-6 pb-8 fixed bottom-0 left-0">
             <div className="glass-hover rounded-2xl p-3 mx-auto max-w-xs flex justify-center items-center gap-8">
               <a 
@@ -213,10 +232,13 @@ export const Desktop = () => {
           </div>
         </div>
       </div>
+
+      {/* Open Windows */}
       {openWindows.map(window => (
         <div
           key={window.id}
           className={`${
+            
             'md:relative fixed md:inset-auto inset-0 z-30'
           }`}
         >
@@ -235,10 +257,12 @@ export const Desktop = () => {
       ))}
 
 
+      
       <div className="hidden md:block">
         <LiveClock />
       </div>
 
+      
       <Dock openWindows={openWindows.map(w => w.id)} />
     </div>
   );
