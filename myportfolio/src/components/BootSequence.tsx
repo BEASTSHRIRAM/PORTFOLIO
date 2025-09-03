@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import natureWallpaper from '@/assets/desktop-wallpaper.jpg';
 
 interface BootSequenceProps {
   onBootComplete: () => void;
@@ -34,7 +35,16 @@ export const BootSequence = ({ onBootComplete }: BootSequenceProps) => {
   }
 
   return (
-    <div className="boot-screen">
+    <div
+      className="boot-screen"
+      style={{
+        backgroundImage: `url(${natureWallpaper})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="absolute inset-0 bg-black/50" />
       <div className="flex flex-col items-center space-y-8">
         {/* Logo */}
         <div className="logo-glow text-6xl font-bold mb-8">
@@ -58,7 +68,7 @@ export const BootSequence = ({ onBootComplete }: BootSequenceProps) => {
         {/* Welcome Message */}
         {stage === 'welcome' && (
           <div className="typing-text text-xl font-medium text-center">
-            Welcome to Shriram Kulkarni's Digital Workspace
+            Welcome to Sriram Kulkarni's Digital Workspace
           </div>
         )}
 

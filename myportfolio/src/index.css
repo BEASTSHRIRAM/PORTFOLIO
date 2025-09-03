@@ -67,9 +67,10 @@
   }
 
   body {
-    font-family: var(--font-system);
-    @apply bg-gradient-to-br from-background via-background-light to-background;
-    @apply text-foreground overflow-hidden;
+  font-family: var(--font-system);
+  @apply bg-gradient-to-br from-background via-background-light to-background;
+  @apply text-foreground overflow-hidden;
+  padding-top: 2.25rem; /* 36px, matches menu bar height */
   }
 }
 
@@ -146,9 +147,10 @@
   
   /* Dock System */
   .dock {
-    @apply glass fixed bottom-4 left-1/2 transform -translate-x-1/2;
-    @apply flex items-center gap-2 px-4 py-3 rounded-2xl;
+    @apply glass flex items-center gap-2 px-4 py-3 rounded-2xl;
     box-shadow: var(--shadow-dock);
+    max-width: max-content;
+    pointer-events: auto;
   }
   
   .dock-icon {

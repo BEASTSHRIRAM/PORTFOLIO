@@ -1,13 +1,11 @@
-import { useState, useCallback } from 'react';
+      import { useState, useCallback, useEffect } from 'react';
 import { FolderOpen, Code, GraduationCap, User } from 'lucide-react';
 import natureWallpaper from '@/assets/nature-wallpaper.jpg';
-
 import { BootSequence } from './BootSequence';
 import { DesktopIcon } from './DesktopIcon';
 import { Window } from './Window';
 import { Dock } from './Dock';
-import { LiveClock } from './LiveClock';
-
+import { MenuBar } from './MenuBar';
 import { ProjectsApp } from './applications/ProjectsApp';
 import { SkillsApp } from './applications/SkillsApp';
 import { EducationApp } from './applications/EducationApp';
@@ -26,6 +24,23 @@ export const Desktop = () => {
   const [isBooting, setIsBooting] = useState(true);
   const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
 
+  // Handle mobile back (popstate) to close topmost window
+  useEffect(() => {
+    const onPopState = (e: PopStateEvent) => {
+      if (window.innerWidth < 768 && openWindows.length > 0) {
+        setOpenWindows(prev => prev.slice(0, -1));
+        window.history.pushState(null, '', window.location.href);
+      }
+    };
+    if (window.innerWidth < 768) {
+      window.history.pushState(null, '', window.location.href);
+      window.addEventListener('popstate', onPopState);
+    }
+    return () => {
+      window.removeEventListener('popstate', onPopState);
+    };
+  }, [openWindows]);
+
   const handleBootComplete = useCallback(() => {
     setIsBooting(false);
   }, []);
@@ -33,7 +48,6 @@ export const Desktop = () => {
   const openWindow = useCallback((windowId: string, title: string, component: JSX.Element) => {
     const existingWindow = openWindows.find(w => w.id === windowId);
     if (existingWindow) {
-      
       setOpenWindows(prev => [
         ...prev.filter(w => w.id !== windowId),
         existingWindow
@@ -67,7 +81,6 @@ export const Desktop = () => {
   }, []);
 
   const minimizeWindow = useCallback((windowId: string) => {
-    
     closeWindow(windowId);
   }, [closeWindow]);
 
@@ -108,11 +121,12 @@ export const Desktop = () => {
 
   return (
     <div 
-      className="min-h-screen w-full relative overflow-hidden before:content-[''] before:fixed before:inset-0 before:z-0"
+      className="min-h-screen w-full relative overflow-hidden before:content-[''] before:fixed before:inset-0 before:z-0 pt-9"
       style={{
         backgroundColor: '#1a1b1e'
       }}
     >
+      <MenuBar />
       
       <div 
         className="fixed inset-0 z-0"
@@ -130,14 +144,13 @@ export const Desktop = () => {
       
       <div className="absolute inset-0 bg-gradient-to-br from-background/20 via-transparent to-background/30"></div>
       
-      
       <div
         className={`relative z-10 p-4 md:p-8 transition-opacity duration-300 ${
           openWindows.length > 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
         {/* Unified responsive icon area (centered for all breakpoints) */}
-        <div className="flex items-center justify-center w-full min-h-[calc(100vh-140px)]">
+        <div className="flex items-center justify-center w-full min-h-[calc(100vh-180px)]">
           <div className="grid gap-6 sm:gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 place-items-center max-w-5xl">
             {desktopApps.map(app => (
               <DesktopIcon
@@ -156,10 +169,9 @@ export const Desktop = () => {
       {openWindows.map(window => (
         <div
           key={window.id}
-          className={`${
-            
-            'md:relative fixed md:inset-auto inset-0 z-30'
-          }`}
+          className={
+            'md:relative fixed md:inset-auto inset-0 z-40 pointer-events-auto'
+          }
         >
           <Window
             title={window.title}
@@ -174,15 +186,19 @@ export const Desktop = () => {
           </Window>
         </div>
       ))}
-
-
       
-      <div className="hidden md:block">
-        <LiveClock />
+      {/* Dock is now placed in a separate div with guaranteed visibility and interactivity */}
+      <div className="fixed bottom-4 left-0 right-0 z-50 pointer-events-auto flex justify-center">
+        <Dock 
+          openWindows={openWindows.map(w => w.id)} 
+          onOpenApp={(appId) => {
+            const app = desktopApps.find(a => a.id === appId);
+            if (app) {
+              openWindow(appId, app.label, app.component);
+            }
+          }} 
+        />
       </div>
-
-      
-      <Dock openWindows={openWindows.map(w => w.id)} />
     </div>
   );
 };

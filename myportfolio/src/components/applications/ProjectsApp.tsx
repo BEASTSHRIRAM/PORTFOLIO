@@ -21,7 +21,7 @@ const mockProjects: Project[] = [
     techStack: ['Spring Boot', 'React', 'MongoDB', 'Tesseract OCR', 'Groq API', 'JWT', 'Vercel', 'Railway'],
     liveUrl: 'https://briefify-ai.vercel.app/',
     githubUrl: 'https://github.com/BEASTSHRIRAM/BriefifyAI',
-    thumbnail: '�'
+    thumbnail: '1'
   },
   {
     id: '2',
@@ -30,7 +30,7 @@ const mockProjects: Project[] = [
     description: 'A comprehensive fitness coaching application featuring an AI chatbot and user authentication. Built with Spring Boot REST API and React frontend, integrated with Botpress for intelligent conversation and MongoDB Atlas for data management.',
     techStack: ['Spring Boot', 'React', 'MongoDB Atlas', 'Botpress', 'REST API'],
     githubUrl: 'https://github.com/BEASTSHRIRAM/FitnessAppAI',
-    thumbnail: '�'
+    thumbnail: '2'
   },
   {
     id: '3',
@@ -39,7 +39,7 @@ const mockProjects: Project[] = [
     description: 'An AI-powered workout manager using RAG-based model for contextual recommendations. Built with Streamlit for the interface and integrated with Astra DB for data persistence. Features LangFlow for orchestrating the AI workflow.',
     techStack: ['Python', 'Streamlit', 'LangFlow', 'Astra DB', 'RAG Model'],
     githubUrl: 'https://github.com/BEASTSHRIRAM/WorkoutApp',
-    thumbnail: '�️'
+    thumbnail: '3'
   }
 ];
 

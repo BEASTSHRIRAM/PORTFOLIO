@@ -74,14 +74,14 @@ export const Window = ({
     left: 0,
     width: '100vw',
     height: '100vh',
-    zIndex: 50
+    zIndex: 40
   } : isMaximized ? {
     position: 'fixed' as const,
     top: 0,
     left: 0,
     width: '100vw',
     height: '100vh',
-    zIndex: 50
+    zIndex: 40
   } : {
     position: 'absolute' as const,
     left: position.x,
@@ -99,7 +99,7 @@ export const Window = ({
     >
       {/* Window Header */}
       <div 
-        className="flex items-center justify-between p-4 border-b sticky top-0 z-10 cursor-move select-none"
+        className="flex items-center justify-between p-4 border-b sticky top-0 z-10 cursor-move select-none mt-9"
         style={{
           borderColor: 'hsl(var(--glass-border) / 0.5)',
           background: 'linear-gradient(to bottom, hsl(var(--glass-bg) / 0.9), hsl(var(--glass-bg) / 0.8))',
@@ -148,7 +148,7 @@ export const Window = ({
       </div>
 
       {/* Window Content */}
-      <div className="flex-1 p-4 md:p-6 custom-scrollbar overflow-auto h-[calc(100%-4rem)]">
+      <div className="flex-1 p-4 md:p-6 custom-scrollbar overflow-auto h-[calc(100%-6.25rem)]">
         {children}
       </div>
     </div>
