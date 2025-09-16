@@ -1,4 +1,5 @@
 import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
+import { LeetCodeIcon } from './icons/LeetCodeIcon';
 
 interface DockProps {
   openWindows: string[];
@@ -6,12 +7,12 @@ interface DockProps {
 }
 
 export const Dock = ({ openWindows, onOpenApp }: DockProps) => {
-  // External links (use personal links from upstream)
   const dockItems = [
     { id: 'github', icon: Github, href: 'https://github.com/BEASTSHRIRAM', label: 'GitHub', color: '#333' },
     { id: 'linkedin', icon: Linkedin, href: 'https://linkedin.com/in/shriram-kulkarni-033b8328a', label: 'LinkedIn', color: '#0077b5' },
     { id: 'email', icon: Mail, href: 'mailto:shrikulk20@gmail.com', label: 'Email', color: '#ea4335' },
     { id: 'resume', icon: ExternalLink, href: 'https://drive.google.com/file/d/1H4X-AazOrSGwJyb5X68blohyWTGxmAx8/preview', label: 'Resume', color: '#6366f1' },
+    { id: 'leetcode', icon: LeetCodeIcon, href: 'https://leetcode.com/u/shriramthebeast/', label: 'LeetCode', color: '#ffa116' },
   ];
 
   console.log('Dock rendering with openWindows:', openWindows);

@@ -113,37 +113,40 @@ export const ProjectsApp = () => {
     <div className="h-full">
       <h2 className="text-2xl font-bold mb-6">My Projects</h2>
       
-      <div className="grid gap-6">
-        {mockProjects.map(project => (
-          <div 
-            key={project.id}
-            className="glass-hover p-6 rounded-xl cursor-pointer transition-all duration-300"
-            onClick={() => setSelectedProject(project)}
-          >
-            <div className="flex items-start gap-4">
-              <div className="text-3xl">{project.thumbnail}</div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                <p className="opacity-80 mb-3">{project.tagline}</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.techStack.slice(0, 3).map(tech => (
-                    <span 
-                      key={tech}
-                      className="px-2 py-1 bg-glass-bg rounded text-xs"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.techStack.length > 3 && (
-                    <span className="px-2 py-1 bg-glass-bg rounded text-xs">
-                      +{project.techStack.length - 3} more
-                    </span>
-                  )}
+      {/* Vertical list with scroll for projects (keeps original grid/cards) */}
+      <div className="overflow-y-auto custom-scrollbar pr-4 max-h-[70vh]" tabIndex={0} aria-label="Projects list">
+        <div className="grid gap-6">
+          {mockProjects.map(project => (
+            <div 
+              key={project.id}
+              className="glass-hover p-6 rounded-xl cursor-pointer transition-all duration-300"
+              onClick={() => setSelectedProject(project)}
+            >
+              <div className="flex items-start gap-4">
+                <div className="text-3xl">{project.thumbnail}</div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                  <p className="opacity-80 mb-3">{project.tagline}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.slice(0, 3).map(tech => (
+                      <span 
+                        key={tech}
+                        className="px-2 py-1 bg-glass-bg rounded text-xs"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.techStack.length > 3 && (
+                      <span className="px-2 py-1 bg-glass-bg rounded text-xs">
+                        +{project.techStack.length - 3} more
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

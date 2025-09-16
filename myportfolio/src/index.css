@@ -49,6 +49,32 @@
     --shadow-dock: 0 -10px 40px hsla(220, 25%, 0%, 0.5);
     
     /* Animations */
+
+  /* Custom Scrollbar and Touch Improvements */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Safari Browser Enhancements */
+  .safari-browser-modal {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  @media (max-width: 640px) {
+    .safari-browser-modal {
+      padding: 0.5rem;
+    }
+  }
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     --transition-glass: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -235,5 +261,65 @@
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary) / 0.8);
+  }
+
+  /* Hide native scrollbar but keep scroll support */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  /* Smooth scrolling for carousels */
+  .snap-x {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Safari Browser Scrollbars */
+  .safari-browser-content {
+    scrollbar-width: auto; /* Firefox - show scrollbars */
+    scrollbar-color: #888 #f1f1f1; /* Firefox - thumb and track colors */
+  }
+
+  .safari-browser-content::-webkit-scrollbar {
+    width: 12px; /* Chrome, Safari - vertical scrollbar width */
+    height: 12px; /* Chrome, Safari - horizontal scrollbar height */
+  }
+
+  .safari-browser-content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Chrome, Safari - scrollbar track */
+    border-radius: 6px;
+  }
+
+  .safari-browser-content::-webkit-scrollbar-thumb {
+    background: #888; /* Chrome, Safari - scrollbar thumb */
+    border-radius: 6px;
+    border: 2px solid #f1f1f1;
+  }
+
+  .safari-browser-content::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Chrome, Safari - scrollbar thumb on hover */
+  }
+
+  /* Dark mode scrollbars */
+  .dark .safari-browser-content {
+    scrollbar-color: #555 #2d2d2d; /* Firefox dark mode */
+  }
+
+  .dark .safari-browser-content::-webkit-scrollbar-track {
+    background: #2d2d2d; /* Chrome, Safari dark mode track */
+  }
+
+  .dark .safari-browser-content::-webkit-scrollbar-thumb {
+    background: #555; /* Chrome, Safari dark mode thumb */
+    border: 2px solid #2d2d2d;
+  }
+
+  .dark .safari-browser-content::-webkit-scrollbar-thumb:hover {
+    background: #777; /* Chrome, Safari dark mode thumb hover */
   }
 }

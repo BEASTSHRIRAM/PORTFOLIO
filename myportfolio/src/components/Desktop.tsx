@@ -1,5 +1,5 @@
       import { useState, useCallback, useEffect } from 'react';
-import { FolderOpen, Code, GraduationCap, User } from 'lucide-react';
+      import { FolderOpen, Code, GraduationCap, User, Award, Calendar } from 'lucide-react';
 import natureWallpaper from '@/assets/nature-wallpaper.jpg';
 import { BootSequence } from './BootSequence';
 import { DesktopIcon } from './DesktopIcon';
@@ -10,6 +10,8 @@ import { ProjectsApp } from './applications/ProjectsApp';
 import { SkillsApp } from './applications/SkillsApp';
 import { EducationApp } from './applications/EducationApp';
 import { AboutApp } from './applications/AboutApp';
+import { CertificationsApp } from './applications/CertificationsApp';
+import { InvolvementsApp } from './applications/InvolvementsApp';
 
 interface OpenWindow {
   id: string;
@@ -91,6 +93,20 @@ export const Desktop = () => {
       label: 'Projects',
       component: <ProjectsApp />,
       colorClass: 'icon-projects text-orange-500'
+    },
+    {
+      id: 'certifications',
+      icon: Award,
+      label: 'Certifications',
+      component: <CertificationsApp />,
+      colorClass: 'icon-certifications text-yellow-500'
+    },
+    {
+      id: 'involvements',
+      icon: Calendar,
+      label: 'Involvements',
+      component: <InvolvementsApp />,
+      colorClass: 'icon-involvements text-indigo-500'
     },
     {
       id: 'skills',

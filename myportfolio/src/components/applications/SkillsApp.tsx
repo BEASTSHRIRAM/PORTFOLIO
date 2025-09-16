@@ -10,9 +10,10 @@ const skills: Skill[] = [
   // Languages
   { name: 'Java', level: 90, category: 'Languages' },
   { name: 'Python', level: 85, category: 'Languages' },
+  { name: 'HTML', level: 80, category: 'Languages' },
+  { name: 'CSS', level: 80, category: 'Languages' },
   { name: 'JavaScript', level: 85, category: 'Languages' },
   { name: 'TypeScript', level: 80, category: 'Languages' },
-  { name: 'Kotlin', level: 75, category: 'Languages' },
   
   // Frameworks & Libraries
   { name: 'Spring Boot', level: 90, category: 'Frameworks & Libraries' },
@@ -28,6 +29,7 @@ const skills: Skill[] = [
   { name: 'Apache Kafka', level: 75, category: 'Developer Tools' },
   
   // Databases
+  { name: 'MySQL', level: 95, category: 'Databases' },
   { name: 'MongoDB', level: 85, category: 'Databases' },
   { name: 'PostgreSQL', level: 80, category: 'Databases' },
 ];
