@@ -1,6 +1,11 @@
       import { useState, useCallback, useEffect } from 'react';
-      import { FolderOpen, Code, GraduationCap, User, Award, Calendar } from 'lucide-react';
-import natureWallpaper from '@/assets/nature-wallpaper.jpg';
+      import { FolderOpen, Code, GraduationCap, User, Award, Calendar, Shuffle } from 'lucide-react';
+      import desktopWallpaper from '@/assets/desktop-wallpaper.jpg';
+      import natureWallpaper from '@/assets/nature-wallpaper.jpg';
+      import os1 from '@/assets/os1.jpg';
+      import os2 from '@/assets/os2.jpeg';
+      import os3 from '@/assets/os3.jpg';
+      import os4 from '@/assets/os4.jpg';
 import { BootSequence } from './BootSequence';
 import { DesktopIcon } from './DesktopIcon';
 import { Window } from './Window';
@@ -25,6 +30,30 @@ interface OpenWindow {
 export const Desktop = () => {
   const [isBooting, setIsBooting] = useState(true);
   const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
+  // Wallpaper state — default to the previously used nature wallpaper
+  const STORAGE_KEY = 'portfolio:wallpaper';
+
+  // Load persisted wallpaper or default to nature
+  const [currentWallpaper, setCurrentWallpaper] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved || natureWallpaper;
+    } catch (err) {
+      return natureWallpaper;
+    }
+  });
+
+  // All available wallpapers to pick from
+  const wallpapers = [desktopWallpaper, natureWallpaper, os1, os2, os3, os4];
+
+  // Persist wallpaper whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, currentWallpaper);
+    } catch (e) {
+      // ignore
+    }
+  }, [currentWallpaper]);
 
   // Handle mobile back (popstate) to close topmost window
   useEffect(() => {
@@ -42,6 +71,14 @@ export const Desktop = () => {
       window.removeEventListener('popstate', onPopState);
     };
   }, [openWindows]);
+
+  const surpriseWallpaper = useCallback(() => {
+    // choose a different wallpaper at random
+    const choices = wallpapers.filter(w => w !== currentWallpaper);
+    if (choices.length === 0) return;
+    const idx = Math.floor(Math.random() * choices.length);
+    setCurrentWallpaper(choices[idx]);
+  }, [currentWallpaper]);
 
   const handleBootComplete = useCallback(() => {
     setIsBooting(false);
@@ -143,11 +180,24 @@ export const Desktop = () => {
       }}
     >
       <MenuBar />
+      {/* Surprise me button + label - picks a random wallpaper from assets */}
+      <div className="fixed right-6 top-14 z-40 flex items-center space-x-3">
+        <span className="hidden sm:inline-block text-sm text-white dark:text-white">Click for a surprise</span>
+        <div>
+          <button
+            onClick={surpriseWallpaper}
+            title="Surprise me"
+            className="flex items-center justify-center w-11 h-11 rounded-full bg-white/90 dark:bg-gray-800/80 shadow-md hover:scale-105 transition-transform backdrop-blur"
+          >
+            <Shuffle className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+          </button>
+        </div>
+      </div>
       
       <div 
         className="fixed inset-0 z-0"
         style={{
-          backgroundImage: `url(${natureWallpaper})`,
+          backgroundImage: `url(${currentWallpaper})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           opacity: 0.7
