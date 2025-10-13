@@ -1,5 +1,4 @@
-import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
-import { LeetCodeIcon } from './icons/LeetCodeIcon';
+import { Github, Linkedin, Mail } from 'lucide-react';
 
 interface DockProps {
   openWindows: string[];
@@ -7,12 +6,20 @@ interface DockProps {
 }
 
 export const Dock = ({ openWindows, onOpenApp }: DockProps) => {
-  const dockItems = [
+  const dockItems: Array<{
+    id: string;
+    icon?: any;
+    image?: string;
+    href: string;
+    label: string;
+    color?: string;
+  }> = [
     { id: 'github', icon: Github, href: 'https://github.com/BEASTSHRIRAM', label: 'GitHub', color: '#333' },
-    { id: 'linkedin', icon: Linkedin, href: 'https://linkedin.com/in/shriram-kulkarni-033b8328a', label: 'LinkedIn', color: '#0077b5' },
+    { id: 'linkedin', icon: Linkedin, href: 'https://linkedin.com/in/sriramkulkarni7878', label: 'LinkedIn', color: '#0077b5' },
     { id: 'email', icon: Mail, href: 'mailto:shrikulk20@gmail.com', label: 'Email', color: '#ea4335' },
-    { id: 'resume', icon: ExternalLink, href: 'https://drive.google.com/file/d/1H4X-AazOrSGwJyb5X68blohyWTGxmAx8/preview', label: 'Resume', color: '#6366f1' },
-    { id: 'leetcode', icon: LeetCodeIcon, href: 'https://leetcode.com/u/shriramthebeast/', label: 'LeetCode', color: '#ffa116' },
+    { id: 'resume', image: '/resumelogo.png', href: 'https://drive.google.com/file/d/14F08lty-q1kQlOZbuh7JeuoO46msEpFg/view?usp=sharing', label: 'Resume' },
+    { id: 'leetcode', image: '/leetcode.png', href: 'https://leetcode.com/u/shriramthebeast/', label: 'LeetCode' },
+    { id: 'codeforces', image: '/codeforces.jpg', href: 'https://codeforces.com/profile/Beast7878', label: 'Codeforces' },
   ];
 
   console.log('Dock rendering with openWindows:', openWindows);
@@ -52,7 +59,15 @@ export const Dock = ({ openWindows, onOpenApp }: DockProps) => {
           title={item.label}
           style={{ color: item.color }}
         >
-          <item.icon size={24} />
+          {item.icon ? (
+            <item.icon size={24} />
+          ) : (
+            <img 
+              src={item.image} 
+              alt={item.label}
+              className="w-6 h-6 object-contain"
+            />
+          )}
         </div>
       ))}
     </div>
