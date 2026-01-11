@@ -51,7 +51,7 @@ export const Launchpad = ({ onClose }: LaunchpadProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-2xl"
+      className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-2xl flex items-start justify-center"
       onClick={onClose}
     >
       <motion.div
@@ -60,7 +60,7 @@ export const Launchpad = ({ onClose }: LaunchpadProps) => {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="w-full h-full flex flex-col items-center pt-20"
+        className="flex flex-col items-center pt-20 w-full max-h-full overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Bar */}
@@ -75,7 +75,7 @@ export const Launchpad = ({ onClose }: LaunchpadProps) => {
         </div>
 
         {/* App Grid */}
-        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-8 px-10 max-w-5xl">
+        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-8 px-10 max-w-5xl pb-20">
           {filteredItems.map((item, index) => (
             <motion.div
               key={item.id}
@@ -101,8 +101,8 @@ export const Launchpad = ({ onClose }: LaunchpadProps) => {
         </div>
 
         {/* Close hint */}
-        <div className="absolute bottom-10 text-white/40 text-sm">
-          Click anywhere or press ESC to close
+        <div className="text-white/40 text-sm pb-10">
+          Click outside or press ESC to close
         </div>
       </motion.div>
     </motion.div>

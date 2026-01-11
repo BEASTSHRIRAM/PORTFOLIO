@@ -33,11 +33,15 @@ const SliderComponent = ({
 
 export default function ControlCenterMenu({ toggleControlCenter, btnRef }: ControlCenterMenuProps) {
   const controlCenterRef = useRef<HTMLDivElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
   
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const isPlaying = useStore((state) => state.isPlaying);
+  const currentTime = useStore((state) => state.currentTime);
+  const duration = useStore((state) => state.duration);
+  const audioElement = useStore((state) => state.audioElement);
+  const setIsPlaying = useStore((state) => state.setIsPlaying);
+  const setCurrentTime = useStore((state) => state.setCurrentTime);
+  const setDuration = useStore((state) => state.setDuration);
+  const setAudioElement = useStore((state) => state.setAudioElement);
   
   const wifi = useStore((state) => state.wifi);
   const bluetooth = useStore((state) => state.bluetooth);
@@ -57,38 +61,46 @@ export default function ControlCenterMenu({ toggleControlCenter, btnRef }: Contr
 
   useClickOutside(controlCenterRef, toggleControlCenter, [btnRef as React.RefObject<HTMLElement>]);
 
+  // Initialize audio element if not already done
+  useEffect(() => {
+    if (!audioElement) {
+      const audio = new Audio('/music.mp3');
+      audio.preload = 'metadata';
+      setAudioElement(audio);
+    }
+  }, [audioElement, setAudioElement]);
+
   // Audio controls
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
+    if (audioElement) {
+      audioElement.volume = volume / 100;
     }
-  }, [volume]);
+  }, [volume, audioElement]);
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    if (!audioElement) return;
 
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
+    const updateTime = () => setCurrentTime(audioElement.currentTime);
+    const updateDuration = () => setDuration(audioElement.duration);
     const handleEnded = () => setIsPlaying(false);
 
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('ended', handleEnded);
+    audioElement.addEventListener('timeupdate', updateTime);
+    audioElement.addEventListener('loadedmetadata', updateDuration);
+    audioElement.addEventListener('ended', handleEnded);
 
     return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
-      audio.removeEventListener('ended', handleEnded);
+      audioElement.removeEventListener('timeupdate', updateTime);
+      audioElement.removeEventListener('loadedmetadata', updateDuration);
+      audioElement.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [audioElement, setCurrentTime, setDuration, setIsPlaying]);
 
   const togglePlay = () => {
-    if (audioRef.current) {
+    if (audioElement) {
       if (isPlaying) {
-        audioRef.current.pause();
+        audioElement.pause();
       } else {
-        audioRef.current.play();
+        audioElement.play();
       }
       setIsPlaying(!isPlaying);
     }
@@ -242,7 +254,6 @@ export default function ControlCenterMenu({ toggleControlCenter, btnRef }: Contr
 
       {/* Now Playing */}
       <div className="col-span-4 bg-white/10 rounded-xl p-3">
-        <audio ref={audioRef} src="/music.mp3" preload="metadata" />
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center overflow-hidden">
             {isPlaying ? (
