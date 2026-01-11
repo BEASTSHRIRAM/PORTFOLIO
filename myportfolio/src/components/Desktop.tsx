@@ -266,7 +266,9 @@ export const Desktop = () => {
       ))}
       
       {/* Dock is now placed in a separate div with guaranteed visibility and interactivity */}
-      <div className="fixed bottom-4 left-0 right-0 z-50 pointer-events-auto flex justify-center">
+      <div className={`fixed bottom-4 left-0 right-0 z-50 pointer-events-auto flex justify-center transition-opacity duration-300 ${
+        openWindows.length > 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      }`}>
         <Dock 
           openWindows={openWindows.map(w => w.id)} 
           onOpenApp={(appId, label) => {

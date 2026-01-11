@@ -52,7 +52,11 @@ export const Launchpad = ({ onClose }: LaunchpadProps) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-2xl flex items-start justify-center"
-      onClick={onClose}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
     >
       <motion.div
         ref={launchpadRef}
