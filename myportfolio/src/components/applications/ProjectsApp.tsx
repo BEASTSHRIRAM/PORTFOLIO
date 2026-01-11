@@ -25,21 +25,49 @@ const mockProjects: Project[] = [
   },
   {
     id: '2',
-    title: 'BeastFitness AI',
-    tagline: 'AI-powered fitness coaching application',
-    description: 'A comprehensive fitness coaching application featuring an AI chatbot and user authentication. Built with Spring Boot REST API and React frontend, integrated with Botpress for intelligent conversation and MongoDB Atlas for data management.',
-    techStack: ['Spring Boot', 'React', 'MongoDB Atlas', 'Botpress', 'REST API'],
+    title: 'BeastXFitness AI',
+    tagline: 'AI-Powered Fitness & Wellness Platform',
+    description: 'A comprehensive AI-powered fitness and wellness application designed to help users achieve their health goals. Features personal records tracking, workout management, progress entries, and an AI chatbot powered by Botpress. Built with Spring Boot REST API and React frontend with MongoDB Atlas for data persistence.',
+    techStack: ['Spring Boot', 'React', 'TypeScript', 'MongoDB Atlas', 'Botpress', 'JWT', 'Spring Security'],
     githubUrl: 'https://github.com/BEASTSHRIRAM/FitnessAppAI',
     thumbnail: '2'
   },
   {
     id: '3',
     title: 'WorkoutApp',
-    tagline: 'Personalized workout management system',
-    description: 'An AI-powered workout manager using RAG-based model for contextual recommendations. Built with Streamlit for the interface and integrated with Astra DB for data persistence. Features LangFlow for orchestrating the AI workflow.',
-    techStack: ['Python', 'Streamlit', 'LangFlow', 'Astra DB', 'RAG Model'],
+    tagline: 'AI-powered personal fitness tool with RAG',
+    description: 'A fitness application that combines Vector Databases (Astra DB) with AI capabilities using Langflow and RAG (Retrieval Augmented Generation) for contextual workout recommendations. Features real-time macros calculation, AI-powered workout recommendations, and contextual note-taking where gym limitations are considered when generating personalized workouts.',
+    techStack: ['Python', 'Streamlit', 'Langflow', 'Astra DB', 'RAG', 'Vector Database'],
     githubUrl: 'https://github.com/BEASTSHRIRAM/WorkoutApp',
     thumbnail: '3'
+  },
+  {
+    id: '4',
+    title: 'AyuMitraAI',
+    tagline: 'Your nearest health center finding partner AI agent',
+    description: 'An intelligent AI agent powered by Motia framework that helps users find their nearest health centers. Built with a polyglot architecture combining TypeScript, Python, and JavaScript, featuring background job processing, event-driven workflows, and AI-powered agent capabilities for healthcare discovery and recommendations.',
+    techStack: ['TypeScript', 'Python', 'JavaScript', 'Motia', 'AI Agent', 'Vercel'],
+    liveUrl: 'https://ayu-mitra-ai.vercel.app/',
+    githubUrl: 'https://github.com/BEASTSHRIRAM/AyuMitraAI',
+    thumbnail: '4'
+  },
+  {
+    id: '5',
+    title: 'TICE - Threat Intelligence Correlation Engine',
+    tagline: 'Advanced IP Analysis & Threat Attribution Platform',
+    description: 'A full-stack cybersecurity threat intelligence platform that correlates data from multiple OSINT sources (AbuseIPDB, Shodan, IPInfo) to provide comprehensive IP address analysis, risk scoring, and AI-powered threat attribution reports. Features 3D geolocation visualization with Three.js, professional SOC dashboard with glassmorphism design, and export capabilities for threat reports.',
+    techStack: ['Python', 'FastAPI', 'React 19', 'Three.js', 'MongoDB', 'Tailwind CSS', 'Shadcn UI'],
+    githubUrl: 'https://github.com/BEASTSHRIRAM/Novatron_58',
+    thumbnail: '5'
+  },
+  {
+    id: '6',
+    title: 'RakshakAI',
+    tagline: 'Security and Protection AI System',
+    description: 'An advanced security and protection platform designed with AI capabilities. RakshakAI focuses on intelligent threat detection and prevention, featuring contextual understanding and adaptive security measures to safeguard users and systems.',
+    techStack: ['AI', 'Security', 'Machine Learning', 'Protection Systems'],
+    githubUrl: 'https://github.com/BEASTSHRIRAM/RakshakAI',
+    thumbnail: '6'
   }
 ];
 

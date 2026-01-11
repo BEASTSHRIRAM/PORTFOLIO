@@ -17,6 +17,10 @@ import { EducationApp } from './applications/EducationApp';
 import { AboutApp } from './applications/AboutApp';
 import { CertificationsApp } from './applications/CertificationsApp';
 import { InvolvementsApp } from './applications/InvolvementsApp';
+import FaceTimeApp from './applications/FaceTimeApp';
+import SafariApp from './applications/SafariApp';
+import TerminalApp from './applications/TerminalApp';
+import VSCodeApp from './applications/VSCodeApp';
 
 interface OpenWindow {
   id: string;
@@ -168,6 +172,14 @@ export const Desktop = () => {
     }
   ];
 
+  // Dock-specific apps (macOS style apps)
+  const dockAppsMap: { [key: string]: { label: string; component: JSX.Element } } = {
+    safari: { label: 'Safari', component: <SafariApp /> },
+    facetime: { label: 'FaceTime', component: <FaceTimeApp /> },
+    terminal: { label: 'Terminal', component: <TerminalApp /> },
+    vscode: { label: 'VS Code', component: <VSCodeApp /> },
+  };
+
   if (isBooting) {
     return <BootSequence onBootComplete={handleBootComplete} />;
   }
@@ -257,7 +269,13 @@ export const Desktop = () => {
       <div className="fixed bottom-4 left-0 right-0 z-50 pointer-events-auto flex justify-center">
         <Dock 
           openWindows={openWindows.map(w => w.id)} 
-          onOpenApp={(appId) => {
+          onOpenApp={(appId, label) => {
+            // Check dock apps first
+            if (dockAppsMap[appId]) {
+              openWindow(appId, dockAppsMap[appId].label, dockAppsMap[appId].component);
+              return;
+            }
+            // Then check desktop apps
             const app = desktopApps.find(a => a.id === appId);
             if (app) {
               openWindow(appId, app.label, app.component);
