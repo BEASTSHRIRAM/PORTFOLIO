@@ -38,19 +38,19 @@ const ABOUT_TEXT = `
 `;
 
 const SKILLS_TEXT = `
-📚 Languages:    JavaScript, TypeScript, Python, Java, C++
-🔧 Frontend:     React, Next.js, Tailwind CSS, Framer Motion
-⚙️ Backend:      Node.js, Express, FastAPI, Django
-🗄️ Database:     MongoDB, PostgreSQL, MySQL, Redis
-☁️ Cloud:        AWS, GCP, Vercel, Docker
-🤖 AI/ML:        TensorFlow, PyTorch, OpenAI API
+Languages:    JavaScript, TypeScript, Python, Java
+Frontend:     React, Next.js, Tailwind CSS, Framer Motion
+Backend:      Node.js, Express, FastAPI
+Database:     MongoDB, PostgreSQL, MySQL, Redis
+Cloud:        AWS, GCP, Vercel, Docker
+AI/ML:        TensorFlow, PyTorch, OpenAI API
 `;
 
 const CONTACT_TEXT = `
-📧 Email:    shrikulk20@gmail.com
-🔗 GitHub:   github.com/BEASTSHRIRAM
-💼 LinkedIn: linkedin.com/in/sriramkulkarni7878
-💻 LeetCode: leetcode.com/u/shriramthebeast
+Email:    shrikulk20@gmail.com
+GitHub:   github.com/BEASTSHRIRAM
+LinkedIn: linkedin.com/in/sriramkulkarni7878
+LeetCode: leetcode.com/u/shriramthebeast
 `;
 
 const FILES: { [key: string]: string } = {
@@ -105,11 +105,14 @@ export default function TerminalApp() {
         break;
       case 'projects':
         addLine('output', `
-🚀 Projects:
-  1. macOS Portfolio - This website!
-  2. AI Chat Application
-  3. E-commerce Platform
-  4. Real-time Collaboration Tool
+Projects:
+  1. Briefify AI - AI-powered document summarization platform
+  2. BeastXFitness AI - AI-Powered Fitness & Wellness Platform
+  3. WorkoutApp - AI-powered personal fitness tool with RAG
+  4. AyuMitraAI - Your nearest health center finding partner AI agent
+  5. TICE - Threat Intelligence Correlation Engine
+  6. RakshakAI - Security and Protection AI System
+  
   
 Run 'open projects' in Finder to see more!
 `);
@@ -117,8 +120,8 @@ Run 'open projects' in Finder to see more!
       case 'education':
         addLine('output', `
 🎓 Education:
-  Bachelor of Technology in Computer Science
-  Expected Graduation: 2025
+  Bachelor of Technology in Information Science JSSATEB
+  Expected Graduation: 2027
 `);
         break;
       case 'social':
