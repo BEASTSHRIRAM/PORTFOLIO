@@ -260,7 +260,7 @@ export const Desktop = () => {
         onSleep={handleSleep}
       />
       {/* Surprise me button + label - picks a random wallpaper from assets */}
-      <div className="fixed right-6 top-14 z-50 flex items-center space-x-3">
+      <div className="fixed right-6 top-14 z-20 flex items-center space-x-3">
         <span className="hidden sm:inline-block text-sm text-white dark:text-white">Click for a surprise</span>
         <div>
           <button
