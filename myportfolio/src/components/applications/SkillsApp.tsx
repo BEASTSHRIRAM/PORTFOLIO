@@ -1,55 +1,37 @@
-import { useState, useEffect } from 'react';
-
 interface Skill {
   name: string;
-  level: number;
   category: string;
 }
 
 const skills: Skill[] = [
   // Languages
-  { name: 'Java', level: 90, category: 'Languages' },
-  { name: 'Python', level: 85, category: 'Languages' },
-  { name: 'HTML', level: 80, category: 'Languages' },
-  { name: 'CSS', level: 80, category: 'Languages' },
-  { name: 'JavaScript', level: 85, category: 'Languages' },
-  { name: 'TypeScript', level: 80, category: 'Languages' },
+  { name: 'Java', category: 'Languages' },
+  { name: 'Python', category: 'Languages' },
+  { name: 'HTML', category: 'Languages' },
+  { name: 'CSS', category: 'Languages' },
+  { name: 'JavaScript', category: 'Languages' },
+  { name: 'TypeScript', category: 'Languages' },
   
   // Frameworks & Libraries
-  { name: 'Spring Boot', level: 90, category: 'Frameworks & Libraries' },
-  { name: 'React', level: 85, category: 'Frameworks & Libraries' },
-  { name: 'Streamlit', level: 80, category: 'Frameworks & Libraries' },
-  { name: 'LangChain', level: 80, category: 'Frameworks & Libraries' },
-  { name: 'LangFlow', level: 75, category: 'Frameworks & Libraries' },
+  { name: 'Spring Boot', category: 'Frameworks & Libraries' },
+  { name: 'React', category: 'Frameworks & Libraries' },
+  { name: 'Streamlit', category: 'Frameworks & Libraries' },
+  { name: 'LangChain', category: 'Frameworks & Libraries' },
+  { name: 'LangFlow', category: 'Frameworks & Libraries' },
   
   // Developer Tools
-  { name: 'Git', level: 90, category: 'Developer Tools' },
-  { name: 'Docker', level: 85, category: 'Developer Tools' },
-  { name: 'SonarQube', level: 80, category: 'Developer Tools' },
-  { name: 'Apache Kafka', level: 75, category: 'Developer Tools' },
+  { name: 'Git', category: 'Developer Tools' },
+  { name: 'Docker', category: 'Developer Tools' },
+  { name: 'SonarQube', category: 'Developer Tools' },
+  { name: 'Apache Kafka', category: 'Developer Tools' },
   
   // Databases
-  { name: 'MySQL', level: 95, category: 'Databases' },
-  { name: 'MongoDB', level: 85, category: 'Databases' },
-  { name: 'PostgreSQL', level: 80, category: 'Databases' },
+  { name: 'MySQL', category: 'Databases' },
+  { name: 'MongoDB', category: 'Databases' },
+  { name: 'PostgreSQL', category: 'Databases' },
 ];
 
 export const SkillsApp = () => {
-  const [animatedSkills, setAnimatedSkills] = useState<Record<string, number>>({});
-  
-  useEffect(() => {
-    // Animate skill bars on mount
-    const timer = setTimeout(() => {
-      const animated = skills.reduce((acc, skill) => {
-        acc[skill.name] = skill.level;
-        return acc;
-      }, {} as Record<string, number>);
-      setAnimatedSkills(animated);
-    }, 300);
-    
-    return () => clearTimeout(timer);
-  }, []);
-
   const categories = Array.from(new Set(skills.map(skill => skill.category)));
 
   return (
@@ -64,26 +46,16 @@ export const SkillsApp = () => {
           <div key={category} className="space-y-4">
             <h3 className="text-lg font-semibold text-primary">{category}</h3>
             
-            <div className="space-y-3">
+            <div className="flex flex-wrap gap-2">
               {skills
                 .filter(skill => skill.category === category)
                 .map(skill => (
-                  <div key={skill.name} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">{skill.name}</span>
-                      <span className="text-sm opacity-70">{skill.level}%</span>
-                    </div>
-                    
-                    <div className="w-full bg-glass-bg rounded-full h-2 overflow-hidden">
-                      <div 
-                        className="h-full rounded-full transition-all duration-1000 ease-out"
-                        style={{
-                          width: `${animatedSkills[skill.name] || 0}%`,
-                          background: 'var(--gradient-primary)'
-                        }}
-                      />
-                    </div>
-                  </div>
+                  <span
+                    key={skill.name}
+                    className="px-3 py-1 bg-glass-hover rounded-full text-sm font-medium"
+                  >
+                    {skill.name}
+                  </span>
                 ))
               }
             </div>

@@ -53,7 +53,7 @@ const TopBarItem = ({ children, onClick, forceHover, hideOnMobile, className = '
   );
 };
 
-export function MenuBar() {
+export function MenuBar({ onLockScreen, onShutdown, onSleep }: { onLockScreen?: () => void; onShutdown?: () => void; onSleep?: () => void }) {
   const appleBtnRef = useRef<HTMLButtonElement>(null);
   const wifiBtnRef = useRef<HTMLDivElement>(null);
   const controlCenterBtnRef = useRef<HTMLDivElement>(null);
@@ -100,7 +100,9 @@ export function MenuBar() {
 
   const handleSleep = () => {
     setShowAppleMenu(false);
-    // Could add a sleep animation/screen
+    if (onSleep) {
+      onSleep();
+    }
   };
 
   const handleRestart = () => {
@@ -110,12 +112,16 @@ export function MenuBar() {
 
   const handleShutDown = () => {
     setShowAppleMenu(false);
-    // Could show a shutdown animation
+    if (onShutdown) {
+      onShutdown();
+    }
   };
 
   const handleLockScreen = () => {
     setShowAppleMenu(false);
-    // Could show lock screen
+    if (onLockScreen) {
+      onLockScreen();
+    }
   };
 
   const handleAbout = () => {

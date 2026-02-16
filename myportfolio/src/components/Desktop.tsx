@@ -11,6 +11,9 @@ import { DesktopIcon } from './DesktopIcon';
 import { Window } from './Window';
 import { Dock } from './Dock';
 import { MenuBar } from './MenuBar';
+import { LoginScreen } from './LoginScreen';
+import { ShutdownScreen } from './ShutdownScreen';
+import { SleepScreen } from './SleepScreen';
 import { ProjectsApp } from './applications/ProjectsApp';
 import { SkillsApp } from './applications/SkillsApp';
 import { EducationApp } from './applications/EducationApp';
@@ -21,6 +24,7 @@ import FaceTimeApp from './applications/FaceTimeApp';
 import SafariApp from './applications/SafariApp';
 import TerminalApp from './applications/TerminalApp';
 import VSCodeApp from './applications/VSCodeApp';
+import BeastApp from './applications/BeastApp';
 
 interface OpenWindow {
   id: string;
@@ -29,11 +33,17 @@ interface OpenWindow {
   position: { x: number; y: number };
   size: { width: number; height: number };
   isMaximized: boolean;
+  mobileModal?: boolean;
+  openedFromLaunchpad?: boolean;
 }
 
 export const Desktop = () => {
   const [isBooting, setIsBooting] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isShuttingDown, setIsShuttingDown] = useState(false);
+  const [isSleeping, setIsSleeping] = useState(false);
   const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
+  const [shouldReopenLaunchpad, setShouldReopenLaunchpad] = useState(false);
   // Wallpaper state — default to the previously used nature wallpaper
   const STORAGE_KEY = 'portfolio:wallpaper';
 
@@ -86,9 +96,46 @@ export const Desktop = () => {
 
   const handleBootComplete = useCallback(() => {
     setIsBooting(false);
+    setIsLoggedIn(true);
+    // Auto-open BeastApp after boot
+    setBeastAutoOpen(true);
   }, []);
 
-  const openWindow = useCallback((windowId: string, title: string, component: JSX.Element) => {
+  const handleLogin = useCallback(() => {
+    setIsLoggedIn(true);
+    setIsBooting(false);
+  }, []);
+
+  const handleLockScreen = useCallback(() => {
+    setIsLoggedIn(false);
+    setOpenWindows([]);
+  }, []);
+
+  const handleShutdown = useCallback(() => {
+    setIsShuttingDown(true);
+    setOpenWindows([]);
+  }, []);
+
+  const handleShutdownComplete = useCallback(() => {
+    // Reset to boot state
+    setIsShuttingDown(false);
+    setIsLoggedIn(false);
+    setIsBooting(true);
+  }, []);
+
+  const handleSleep = useCallback(() => {
+    setIsSleeping(true);
+    setOpenWindows([]);
+  }, []);
+
+  const handleWakeUp = useCallback(() => {
+    setIsSleeping(false);
+    // Stay logged in after waking up
+  }, []);
+
+  const [beastAutoOpen, setBeastAutoOpen] = useState(false);
+
+  const openWindow = useCallback((windowId: string, title: string, component: JSX.Element, fromLaunchpad?: boolean) => {
     const existingWindow = openWindows.find(w => w.id === windowId);
     if (existingWindow) {
       setOpenWindows(prev => [
@@ -107,15 +154,20 @@ export const Desktop = () => {
         y: 50 + openWindows.length * 40 
       },
       size: { width: 800, height: 600 },
-      isMaximized: true // Open fullscreen by default
+      isMaximized: true, // Open fullscreen by default
+      openedFromLaunchpad: fromLaunchpad
     };
 
     setOpenWindows(prev => [...prev, newWindow]);
   }, [openWindows]);
 
   const closeWindow = useCallback((windowId: string) => {
+    const windowToClose = openWindows.find(w => w.id === windowId);
+    if (windowToClose?.openedFromLaunchpad) {
+      setShouldReopenLaunchpad(true);
+    }
     setOpenWindows(prev => prev.filter(w => w.id !== windowId));
-  }, []);
+  }, [openWindows]);
 
   const maximizeWindow = useCallback((windowId: string) => {
     setOpenWindows(prev => prev.map(w => 
@@ -127,50 +179,42 @@ export const Desktop = () => {
     closeWindow(windowId);
   }, [closeWindow]);
 
-  const desktopApps = [
-    {
-      id: 'projects',
-      icon: FolderOpen,
-      label: 'Projects',
-      component: <ProjectsApp />,
-      colorClass: 'icon-projects text-orange-500'
+  // Helper to open an app by id (used by BeastApp quick links)
+  const openAppById = useCallback(
+    (appId: string) => {
+      const all: { id: string; label: string; component: JSX.Element }[] = [
+        { id: 'projects', label: 'Projects', component: <ProjectsApp /> },
+        { id: 'certifications', label: 'Certifications', component: <CertificationsApp /> },
+        { id: 'involvements', label: 'Involvements', component: <InvolvementsApp /> },
+        { id: 'skills', label: 'Skills', component: <SkillsApp /> },
+        { id: 'education', label: 'Education', component: <EducationApp /> },
+        { id: 'about', label: 'About Me', component: <AboutApp /> },
+      ];
+      const target = all.find((a) => a.id === appId);
+      if (target) openWindow(target.id, target.label, target.component);
     },
-    {
-      id: 'certifications',
-      icon: Award,
-      label: 'Certifications',
-      component: <CertificationsApp />,
-      colorClass: 'icon-certifications text-yellow-500'
-    },
-    {
-      id: 'involvements',
-      icon: Calendar,
-      label: 'Involvements',
-      component: <InvolvementsApp />,
-      colorClass: 'icon-involvements text-indigo-500'
-    },
-    {
-      id: 'skills',
-      icon: Code,
-      label: 'Skills',
-      component: <SkillsApp />,
-      colorClass: 'icon-skills text-blue-500'
-    },
-    {
-      id: 'education',
-      icon: GraduationCap,
-      label: 'Education',
-      component: <EducationApp />,
-      colorClass: 'icon-education text-green-500'
-    },
-    {
-      id: 'about',
-      icon: User,
-      label: 'About Me',
-      component: <AboutApp />,
-      colorClass: 'icon-about text-red-500'
+    [openWindow]
+  );
+
+  // Auto-open BeastApp once after boot (non-maximized / minimized style)
+  useEffect(() => {
+    if (beastAutoOpen) {
+      const beastWindow: OpenWindow = {
+        id: 'beast',
+        title: 'Welcome',
+        component: <BeastApp />,
+        position: { x: 80, y: 60 },
+        size: { width: 520, height: 480 },
+        isMaximized: false,
+        mobileModal: true, // Show as centered modal on mobile
+      };
+      setOpenWindows(prev => [...prev, beastWindow]);
+      setBeastAutoOpen(false);
     }
-  ];
+  }, [beastAutoOpen, openAppById]);
+
+  // Portfolio apps are now only accessible via Launchpad
+  const desktopApps: any[] = [];
 
   // Dock-specific apps (macOS style apps)
   const dockAppsMap: { [key: string]: { label: string; component: JSX.Element } } = {
@@ -180,8 +224,27 @@ export const Desktop = () => {
     vscode: { label: 'VS Code', component: <VSCodeApp /> },
   };
 
+  if (isShuttingDown) {
+    return <ShutdownScreen onShutdownComplete={handleShutdownComplete} />;
+  }
+
+  if (isSleeping) {
+    return <SleepScreen onWakeUp={handleWakeUp} />;
+  }
+
   if (isBooting) {
     return <BootSequence onBootComplete={handleBootComplete} />;
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <LoginScreen 
+        onLogin={handleLogin}
+        userName="Sriram Kulkarni"
+        userPhoto="/yo.jpeg"
+        wallpaper={os2}
+      />
+    );
   }
 
   return (
@@ -191,9 +254,13 @@ export const Desktop = () => {
         backgroundColor: '#1a1b1e'
       }}
     >
-      <MenuBar />
+      <MenuBar 
+        onLockScreen={handleLockScreen}
+        onShutdown={handleShutdown}
+        onSleep={handleSleep}
+      />
       {/* Surprise me button + label - picks a random wallpaper from assets */}
-      <div className="fixed right-6 top-14 z-40 flex items-center space-x-3">
+      <div className="fixed right-6 top-14 z-50 flex items-center space-x-3">
         <span className="hidden sm:inline-block text-sm text-white dark:text-white">Click for a surprise</span>
         <div>
           <button
@@ -247,10 +314,13 @@ export const Desktop = () => {
       {openWindows.map(window => (
         <div
           key={window.id}
-          className={
-            'md:relative fixed md:inset-auto inset-0 z-40 pointer-events-auto'
-          }
+          className="fixed inset-0 z-40 pointer-events-none"
         >
+          {/* Mobile modal backdrop */}
+          {window.mobileModal && (
+            <div className="md:hidden fixed inset-0 bg-black/20 pointer-events-auto" />
+          )}
+          <div className="pointer-events-auto w-full h-full">
           <Window
             title={window.title}
             onClose={() => closeWindow(window.id)}
@@ -259,28 +329,47 @@ export const Desktop = () => {
             initialPosition={window.position}
             initialSize={window.size}
             isMaximized={window.isMaximized}
+            mobileModal={window.mobileModal}
           >
             {window.component}
           </Window>
+          </div>
         </div>
       ))}
       
       {/* Dock is now placed in a separate div with guaranteed visibility and interactivity */}
       <div className={`fixed bottom-4 left-0 right-0 z-50 pointer-events-auto flex justify-center transition-opacity duration-300 ${
-        openWindows.length > 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        openWindows.some(w => w.isMaximized) ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}>
         <Dock 
           openWindows={openWindows.map(w => w.id)} 
-          onOpenApp={(appId, label) => {
+          shouldOpenLaunchpad={shouldReopenLaunchpad}
+          onLaunchpadStateChange={(isOpen) => {
+            if (isOpen) setShouldReopenLaunchpad(false);
+          }}
+          onOpenApp={(appId, label, fromLaunchpad) => {
             // Check dock apps first
             if (dockAppsMap[appId]) {
-              openWindow(appId, dockAppsMap[appId].label, dockAppsMap[appId].component);
+              openWindow(appId, dockAppsMap[appId].label, dockAppsMap[appId].component, fromLaunchpad);
               return;
             }
             // Then check desktop apps
             const app = desktopApps.find(a => a.id === appId);
             if (app) {
-              openWindow(appId, app.label, app.component);
+              openWindow(appId, app.label, app.component, fromLaunchpad);
+              return;
+            }
+            // Fallback: portfolio apps from Launchpad
+            const portfolioApp = [
+              { id: 'projects', label: 'Projects', component: <ProjectsApp /> },
+              { id: 'certifications', label: 'Certifications', component: <CertificationsApp /> },
+              { id: 'involvements', label: 'Involvements', component: <InvolvementsApp /> },
+              { id: 'skills', label: 'Skills', component: <SkillsApp /> },
+              { id: 'education', label: 'Education', component: <EducationApp /> },
+              { id: 'about', label: 'About Me', component: <AboutApp /> },
+            ].find(a => a.id === appId);
+            if (portfolioApp) {
+              openWindow(portfolioApp.id, portfolioApp.label, portfolioApp.component, fromLaunchpad);
             }
           }} 
         />

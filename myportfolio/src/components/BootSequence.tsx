@@ -75,7 +75,7 @@ export const BootSequence = ({ onBootComplete }: BootSequenceProps) => {
         {/* System info */}
         {stage !== 'logo' && (
           <div className="text-sm opacity-60 absolute bottom-8">
-            Portfolio OS v2.0 • Loading Experience...
+            Portfolio OS v5.9 • Loading Experience...
           </div>
         )}
       </div>

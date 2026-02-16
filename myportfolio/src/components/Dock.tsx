@@ -1,11 +1,13 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { useStore } from '../store';
 import { Launchpad } from './Launchpad';
 
 interface DockProps {
   openWindows: string[];
-  onOpenApp?: (appId: string, title: string) => void;
+  onOpenApp?: (appId: string, title: string, fromLaunchpad?: boolean) => void;
+  shouldOpenLaunchpad?: boolean;
+  onLaunchpadStateChange?: (isOpen: boolean) => void;
 }
 
 interface DockItem {
@@ -113,12 +115,25 @@ const DockItem = ({
   );
 };
 
-export const Dock = ({ openWindows, onOpenApp }: DockProps) => {
+export const Dock = ({ openWindows, onOpenApp, shouldOpenLaunchpad, onLaunchpadStateChange }: DockProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue<number>(0);
   const dockSize = useStore((state) => state.dockSize);
   const dockMag = useStore((state) => state.dockMag);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
+
+  // Watch for external trigger to open Launchpad
+  useEffect(() => {
+    if (shouldOpenLaunchpad && !isLaunchpadOpen) {
+      setIsLaunchpadOpen(true);
+      onLaunchpadStateChange?.(true);
+    }
+  }, [shouldOpenLaunchpad, isLaunchpadOpen, onLaunchpadStateChange]);
+
+  // Notify parent when Launchpad state changes
+  useEffect(() => {
+    onLaunchpadStateChange?.(isLaunchpadOpen);
+  }, [isLaunchpadOpen, onLaunchpadStateChange]);
 
   // Main dock apps (macOS style)
   const dockApps: DockItem[] = [
@@ -151,7 +166,13 @@ export const Dock = ({ openWindows, onOpenApp }: DockProps) => {
     <>
       <AnimatePresence>
         {isLaunchpadOpen && (
-          <Launchpad onClose={() => setIsLaunchpadOpen(false)} />
+          <Launchpad
+            onClose={() => setIsLaunchpadOpen(false)}
+            onOpenApp={(appId, title) => {
+              setIsLaunchpadOpen(false);
+              if (onOpenApp) onOpenApp(appId, title, true); // Mark as opened from Launchpad
+            }}
+          />
         )}
       </AnimatePresence>
 

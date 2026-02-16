@@ -66,6 +66,7 @@ const mockProjects: Project[] = [
     tagline: 'Security and Protection AI System',
     description: 'An advanced security and protection platform designed with AI capabilities. RakshakAI focuses on intelligent threat detection and prevention, featuring contextual understanding and adaptive security measures to safeguard users and systems.',
     techStack: ['AI', 'Security', 'Machine Learning', 'Protection Systems'],
+    liveUrl: 'https://rakshak-ai-two.vercel.app/',
     githubUrl: 'https://github.com/BEASTSHRIRAM/RakshakAI',
     thumbnail: '6'
   }

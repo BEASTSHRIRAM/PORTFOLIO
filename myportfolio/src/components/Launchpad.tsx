@@ -1,27 +1,56 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import {
+  FolderOpen,
+  Award,
+  Calendar,
+  Code,
+  GraduationCap,
+  User,
+  type LucideIcon,
+} from 'lucide-react';
 
-interface LaunchpadItem {
+interface LaunchpadExternalItem {
   id: string;
   title: string;
   image: string;
   href: string;
+  kind: 'external';
 }
+
+interface LaunchpadAppItem {
+  id: string;
+  title: string;
+  icon: LucideIcon;
+  iconColor: string;
+  kind: 'app';
+}
+
+type LaunchpadItem = LaunchpadExternalItem | LaunchpadAppItem;
 
 interface LaunchpadProps {
   onClose: () => void;
+  onOpenApp?: (appId: string, title: string) => void;
 }
 
 const launchpadItems: LaunchpadItem[] = [
-  { id: 'github', title: 'GitHub', image: '/github.png', href: 'https://github.com/BEASTSHRIRAM' },
-  { id: 'linkedin', title: 'LinkedIn', image: '/linkedin.png', href: 'https://linkedin.com/in/sriramkulkarni7878' },
-  { id: 'email', title: 'Email', image: '/gmail.png', href: 'mailto:shrikulk20@gmail.com' },
-  { id: 'resume', title: 'Resume', image: '/resumelogo.png', href: 'https://drive.google.com/file/d/1Ke74lav-fygrM6Y0fVgRN9SUKHIW2dC-/view?usp=sharing' },
-  { id: 'leetcode', title: 'LeetCode', image: '/leetcode.png', href: 'https://leetcode.com/u/shriramthebeast/' },
-  { id: 'codeforces', title: 'Codeforces', image: '/codeforces.jpg', href: 'https://codeforces.com/profile/Beast7878' },
+  // Portfolio apps
+  { id: 'projects', title: 'Projects', icon: FolderOpen, iconColor: '#f97316', kind: 'app' },
+  { id: 'certifications', title: 'Certifications', icon: Award, iconColor: '#eab308', kind: 'app' },
+  { id: 'involvements', title: 'Involvements', icon: Calendar, iconColor: '#6366f1', kind: 'app' },
+  { id: 'skills', title: 'Skills', icon: Code, iconColor: '#3b82f6', kind: 'app' },
+  { id: 'education', title: 'Education', icon: GraduationCap, iconColor: '#22c55e', kind: 'app' },
+  { id: 'about', title: 'About Me', icon: User, iconColor: '#ef4444', kind: 'app' },
+  // External links
+  { id: 'github', title: 'GitHub', image: '/github.png', href: 'https://github.com/BEASTSHRIRAM', kind: 'external' },
+  { id: 'linkedin', title: 'LinkedIn', image: '/linkedin.png', href: 'https://linkedin.com/in/sriramkulkarni7878', kind: 'external' },
+  { id: 'email', title: 'Email', image: '/gmail.png', href: 'mailto:shrikulk20@gmail.com', kind: 'external' },
+  { id: 'resume', title: 'Resume', image: '/resumelogo.png', href: 'https://drive.google.com/file/d/1Ke74lav-fygrM6Y0fVgRN9SUKHIW2dC-/view?usp=sharing', kind: 'external' },
+  { id: 'leetcode', title: 'LeetCode', image: '/leetcode.png', href: 'https://leetcode.com/u/shriramthebeast/', kind: 'external' },
+  { id: 'codeforces', title: 'Codeforces', image: '/codeforces.jpg', href: 'https://codeforces.com/profile/Beast7878', kind: 'external' },
 ];
 
-export const Launchpad = ({ onClose }: LaunchpadProps) => {
+export const Launchpad = ({ onClose, onOpenApp }: LaunchpadProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const launchpadRef = useRef<HTMLDivElement>(null);
 
@@ -40,8 +69,12 @@ export const Launchpad = ({ onClose }: LaunchpadProps) => {
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleItemClick = (href: string) => {
-    window.open(href, '_blank');
+  const handleItemClick = (item: LaunchpadItem) => {
+    if (item.kind === 'external') {
+      window.open(item.href, '_blank');
+    } else if (onOpenApp) {
+      onOpenApp(item.id, item.title);
+    }
     onClose();
   };
 
@@ -87,15 +120,19 @@ export const Launchpad = ({ onClose }: LaunchpadProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
               className="flex flex-col items-center cursor-pointer group"
-              onClick={() => handleItemClick(item.href)}
+              onClick={() => handleItemClick(item)}
             >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-white/10 shadow-lg group-hover:scale-110 transition-transform duration-200">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                  draggable={false}
-                />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-white/10 shadow-lg group-hover:scale-110 transition-transform duration-200 flex items-center justify-center">
+                {item.kind === 'external' ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                    draggable={false}
+                  />
+                ) : (
+                  <item.icon size={36} style={{ color: item.iconColor }} />
+                )}
               </div>
               <span className="mt-2 text-white text-xs sm:text-sm text-center truncate max-w-[80px]">
                 {item.title}

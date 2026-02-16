@@ -19,7 +19,7 @@ export const InvolvementsApp = () => {
       placement: '🥉 3rd Place',
       project: 'Project Name',
       description: 'An innovative solution showcasing technical excellence and problem-solving skills.',
-      certificateUrl: '',
+      certificateUrl: 'https://drive.google.com/file/d/1Lhw8LlxyFyyW-I5j8guY5hF1QDxxT_D5/view?usp=sharing',
       icon: <Trophy className="w-6 h-6 text-yellow-500" />
     },
     {
@@ -28,7 +28,7 @@ export const InvolvementsApp = () => {
       placement: '4th Place',
       project: 'ReadyIndia',
       description: 'A disaster management platform built with multilingual support to help communities prepare and respond to emergencies.',
-      certificateUrl: '',
+      certificateUrl: 'https://drive.google.com/file/d/1DqFiR6xUAoitF-atjg9w0WtmIlr23yOC/view?usp=sharing',
       icon: <Code className="w-6 h-6 text-blue-500" />
     },
     {
@@ -37,7 +37,7 @@ export const InvolvementsApp = () => {
       placement: 'Completion',
       project: 'AyuMitraAI',
       description: 'An AI-powered health center discovery platform using Motia framework for intelligent agent-based recommendations.',
-      certificateUrl: '',
+      certificateUrl: 'https://drive.google.com/file/d/1eoWmvUy5e1VUzHXbz92D7YouEWwF39bD/view?usp=sharing',
       icon: <Award className="w-6 h-6 text-purple-500" />
     },
     {
@@ -46,7 +46,7 @@ export const InvolvementsApp = () => {
       placement: 'Completion',
       project: 'Product Manager Copilot & Campus Event Copilot',
       description: 'AI-powered automation tools for managing products and organizing campus events efficiently.',
-      certificateUrl: '',
+      certificateUrl: 'https://drive.google.com/file/d/1wRlEghaWw8N6pDVqFNTFBFZ9OxiYAo8E/view?usp=sharing',
       icon: <Code className="w-6 h-6 text-green-500" />
     },
     {
@@ -56,6 +56,15 @@ export const InvolvementsApp = () => {
       project: 'TICE - Threat Intelligence Correlation Engine',
       description: 'A comprehensive cybersecurity platform for threat intelligence analysis with 3D visualization and OSINT integration.',
       certificateUrl: '',
+      icon: <Award className="w-6 h-6 text-red-500" />
+    },
+     {
+      id: 5,
+      name: 'Zenith Hackathon',
+      placement: 'Completion',
+      project: 'ExpediteAI',
+      description: 'A AI Automation platform to identify the right people, understand intent, context and timing, generate personalized outreach, and adapt messaging based on responses until a goal is achieved.  ',
+      certificateUrl: 'https://drive.google.com/file/d/1TwoT0cuiYX9W7BSBXG-mDPWpaKwjjCqs/view?usp=sharing',
       icon: <Award className="w-6 h-6 text-red-500" />
     },
   ];
