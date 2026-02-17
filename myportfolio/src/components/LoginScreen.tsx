@@ -15,28 +15,25 @@ export const LoginScreen = ({
   wallpaper = desktopWallpaper
 }: LoginScreenProps) => {
   const [password, setPassword] = useState('');
-  const [showInput, setShowInput] = useState(false);
   const [shake, setShake] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (showInput && inputRef.current) {
+    // Auto-focus input on mount
+    if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [showInput]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.trim()) {
-      onLogin();
-    } else {
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-    }
+    // Trigger boot when form is submitted (go button or enter key)
+    onLogin();
   };
 
-  const handleProfileClick = () => {
-    setShowInput(true);
+  const handleClickToEnter = () => {
+    // Trigger boot when "Click to enter" is clicked
+    onLogin();
   };
 
   return (
@@ -55,10 +52,7 @@ export const LoginScreen = ({
       <div className="relative z-10 flex flex-col items-center">
         {/* Profile photo */}
         <div 
-          className={`w-32 h-32 rounded-full overflow-hidden border-4 border-white/30 mb-6 cursor-pointer transition-transform ${
-            !showInput ? 'hover:scale-105' : ''
-          } ${shake ? 'animate-shake' : ''}`}
-          onClick={!showInput ? handleProfileClick : undefined}
+          className={`w-32 h-32 rounded-full overflow-hidden border-4 border-white/30 mb-6 ${shake ? 'animate-shake' : ''}`}
         >
           <img 
             src={userPhoto} 
@@ -72,49 +66,44 @@ export const LoginScreen = ({
           {userName}
         </h2>
 
-        {/* Password input or prompt */}
-        {!showInput ? (
-          <button
-            onClick={handleProfileClick}
-            className="text-white/80 hover:text-white text-sm transition-colors"
-          >
-            Click to login
-          </button>
-        ) : (
-          <form onSubmit={handleSubmit} className="w-64">
-            <div className={`relative ${shake ? 'animate-shake' : ''}`}>
-              <input
-                ref={inputRef}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                className="w-full px-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
-              />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+        {/* Password input form */}
+        <form onSubmit={handleSubmit} className="w-64">
+          <div className={`relative ${shake ? 'animate-shake' : ''}`}>
+            <input
+              ref={inputRef}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter Password"
+              className="w-full px-4 py-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            >
+              <svg 
+                width="16" 
+                height="16" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                className="text-white"
               >
-                <svg 
-                  width="16" 
-                  height="16" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                  className="text-white"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </button>
-            </div>
-            <p className="text-white/60 text-xs mt-2 text-center">
-              Type anything to login
-            </p>
-          </form>
-        )}
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={handleClickToEnter}
+            className="text-white/60 hover:text-white text-xs mt-3 text-center w-full transition-colors cursor-pointer"
+          >
+            Click to enter
+          </button>
+        </form>
       </div>
 
       <style>{`

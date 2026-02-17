@@ -6,6 +6,7 @@
       import os2 from '@/assets/os2.jpeg';
       import os3 from '@/assets/os3.jpg';
       import os4 from '@/assets/os4.jpg';
+      import os5 from '@/assets/os5.jpg';
 import { BootSequence } from './BootSequence';
 import { DesktopIcon } from './DesktopIcon';
 import { Window } from './Window';
@@ -38,7 +39,7 @@ interface OpenWindow {
 }
 
 export const Desktop = () => {
-  const [isBooting, setIsBooting] = useState(true);
+  const [isBooting, setIsBooting] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isShuttingDown, setIsShuttingDown] = useState(false);
   const [isSleeping, setIsSleeping] = useState(false);
@@ -102,8 +103,8 @@ export const Desktop = () => {
   }, []);
 
   const handleLogin = useCallback(() => {
-    setIsLoggedIn(true);
-    setIsBooting(false);
+    // Trigger boot sequence after login
+    setIsBooting(true);
   }, []);
 
   const handleLockScreen = useCallback(() => {
@@ -117,10 +118,10 @@ export const Desktop = () => {
   }, []);
 
   const handleShutdownComplete = useCallback(() => {
-    // Reset to boot state
+    // Reset to login screen
     setIsShuttingDown(false);
     setIsLoggedIn(false);
-    setIsBooting(true);
+    setIsBooting(false);
   }, []);
 
   const handleSleep = useCallback(() => {
@@ -242,7 +243,7 @@ export const Desktop = () => {
         onLogin={handleLogin}
         userName="Sriram Kulkarni"
         userPhoto="/yo.jpeg"
-        wallpaper={os2}
+        wallpaper={os5}
       />
     );
   }
