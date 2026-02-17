@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, type MotionValue } from 'framer-motion';
 import { useStore } from '../store';
 import { Launchpad } from './Launchpad';
 
@@ -19,6 +19,78 @@ interface DockItem {
   color?: string;
 }
 
+// Custom hook for dock hover animation with RAF-based smooth updates
+const useDockHoverAnimation = (
+  mouseX: MotionValue<number | null>,
+  ref: React.RefObject<HTMLElement>,
+  dockSize: number,
+  dockMag: number
+) => {
+  const distanceLimit = dockSize * 6;
+  
+  // 7-point curve for smooth magnification falloff
+  const distanceInput = [
+    -distanceLimit,
+    -distanceLimit / 1.75,
+    -distanceLimit / 2.5,
+    0,
+    distanceLimit / 2.5,
+    distanceLimit / 1.75,
+    distanceLimit
+  ];
+  
+  const widthOutput = [
+    dockSize,
+    dockSize * 1.2,
+    dockSize * 1.4,
+    dockSize * dockMag,
+    dockSize * 1.4,
+    dockSize * 1.2,
+    dockSize
+  ];
+  
+  const beyondTheDistanceLimit = distanceLimit + 1;
+  const distance = useMotionValue(beyondTheDistanceLimit);
+  
+  const widthPX = useSpring(
+    useTransform(distance, distanceInput, widthOutput),
+    {
+      stiffness: 1300,
+      damping: 80
+    }
+  );
+  
+  const width = useTransform(widthPX, (w) => `${w}px`);
+  
+  useEffect(() => {
+    let rafId: number;
+    
+    const updateDistance = () => {
+      const el = ref.current;
+      const mouseXVal = mouseX.get();
+      
+      if (el && mouseXVal !== null) {
+        const rect = el.getBoundingClientRect();
+        const imgCenterX = rect.left + rect.width / 2;
+        const distanceDelta = mouseXVal - imgCenterX;
+        distance.set(distanceDelta);
+      } else {
+        distance.set(beyondTheDistanceLimit);
+      }
+      
+      rafId = requestAnimationFrame(updateDistance);
+    };
+    
+    updateDistance();
+    
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [mouseX, ref, distance, beyondTheDistanceLimit]);
+  
+  return { width, widthPX };
+};
+
 const DockItem = ({ 
   item, 
   mouseX, 
@@ -28,35 +100,17 @@ const DockItem = ({
   dockMag
 }: { 
   item: DockItem; 
-  mouseX: any; 
+  mouseX: MotionValue<number | null>; 
   onOpenApp?: (id: string, label: string) => void;
   isOpen: boolean;
   dockSize: number;
   dockMag: number;
 }) => {
   const imgRef = useRef<HTMLLIElement>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
   
-  const distance = useMotionValue<number>(9999);
-  
-  const minSize = dockSize * 0.5;
-  const maxSize = dockSize * dockMag;
-  
-  const widthSync = useSpring(
-    useTransform(distance, [-200, 0, 200], [minSize, maxSize, minSize]),
-    { damping: 20, stiffness: 300 }
-  );
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!imgRef.current) return;
-    const rect = imgRef.current.getBoundingClientRect();
-    const imgCenterX = rect.left + rect.width / 2;
-    const distanceDelta = (e as any).clientX - imgCenterX;
-    distance.set(distanceDelta);
-  };
-
-  const handleMouseLeave = () => {
-    distance.set(9999);
-  };
+  const { width } = useDockHoverAnimation(mouseX, imgRef, dockSize, dockMag);
 
   const handleClick = () => {
     if (item.href) {
@@ -69,36 +123,42 @@ const DockItem = ({
   return (
     <motion.li
       ref={imgRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
       onClick={handleClick}
-      style={{ width: widthSync }}
+      onMouseEnter={() => !isMobile && setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
+      style={isMobile ? { width: `${dockSize}px`, height: `${dockSize}px` } : { width, height: width }}
       className="relative flex flex-col items-center justify-end cursor-pointer"
     >
       {/* Tooltip */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileHover={{ opacity: 1, y: -30 }}
-        transition={{ duration: 0.2 }}
-        className="absolute bottom-full mb-2 px-3 py-1 bg-black/70 text-white text-xs rounded-md whitespace-nowrap pointer-events-none"
-      >
-        {item.label}
-      </motion.div>
+      <AnimatePresence>
+        {showTooltip && !isMobile && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.9 }}
+            transition={{ duration: 0.15 }}
+            className="absolute bottom-full mb-2 px-2.5 py-1 bg-gray-800/90 text-white text-xs rounded-md whitespace-nowrap pointer-events-none backdrop-blur-sm z-50"
+          >
+            {item.label}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Icon/Image */}
-      <div className="w-full flex items-center justify-center" style={{ height: `${dockSize}px` }}>
+      {/* Icon/Image Container */}
+      <div className="w-full h-full flex items-center justify-center p-1">
         {item.icon ? (
           <item.icon 
-            size={dockSize * 0.7} 
+            className="w-[70%] h-[70%]"
             style={{ color: item.color }}
-            className="transition-transform"
           />
         ) : (
-          <img 
+          <motion.img 
             src={item.image} 
             alt={item.label}
-            className="h-full w-full object-contain"
+            title={item.label}
+            className="w-full h-full object-contain"
             draggable={false}
+            style={{ willChange: isMobile ? 'auto' : 'width' }}
           />
         )}
       </div>
@@ -108,7 +168,8 @@ const DockItem = ({
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="w-2 h-2 rounded-full bg-white mt-1"
+          exit={{ scale: 0 }}
+          className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-white/80"
         />
       )}
     </motion.li>
@@ -117,10 +178,11 @@ const DockItem = ({
 
 export const Dock = ({ openWindows, onOpenApp, shouldOpenLaunchpad, onLaunchpadStateChange }: DockProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue<number>(0);
+  const mouseX = useMotionValue<number | null>(null);
   const dockSize = useStore((state) => state.dockSize);
   const dockMag = useStore((state) => state.dockMag);
   const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
 
   // Watch for external trigger to open Launchpad
   useEffect(() => {
@@ -145,11 +207,15 @@ export const Dock = ({ openWindows, onOpenApp, shouldOpenLaunchpad, onLaunchpadS
   ];
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    mouseX.set(e.clientX);
+    if (!isMobile) {
+      mouseX.set(e.clientX);
+    }
   };
 
   const handleMouseLeave = () => {
-    mouseX.set(0);
+    if (!isMobile) {
+      mouseX.set(null);
+    }
   };
 
   const handleDockItemClick = (item: DockItem) => {
@@ -176,20 +242,24 @@ export const Dock = ({ openWindows, onOpenApp, shouldOpenLaunchpad, onLaunchpadS
         )}
       </AnimatePresence>
 
-      <motion.div
-        ref={containerRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
-      >
-        <motion.ul
-          className="flex gap-2 px-3 py-2 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20"
-          style={{
-            minHeight: `${dockSize + 30}px`,
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-          }}
+      <div className="fixed bottom-4 sm:bottom-6 left-0 right-0 z-50 flex justify-center">
+        <motion.div
+          ref={containerRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         >
+          <motion.ul
+            className="flex gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-2xl"
+            style={{
+              height: 'auto',
+              minHeight: `${dockSize + 16}px`,
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+            }}
+          >
           {/* Main apps */}
           {dockApps.map(item => (
             <DockItem 
@@ -203,7 +273,8 @@ export const Dock = ({ openWindows, onOpenApp, shouldOpenLaunchpad, onLaunchpadS
             />
           ))}
         </motion.ul>
-      </motion.div>
+        </motion.div>
+      </div>
     </>
   );
 };

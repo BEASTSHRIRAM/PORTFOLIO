@@ -39,6 +39,10 @@ export const Window = ({
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) return;
     
+    // Prevent dragging on mobile modals
+    const isMobileDevice = window.innerWidth < 768;
+    if (isMobileDevice && mobileModal) return;
+    
     const rect = windowRef.current?.getBoundingClientRect();
     if (rect) {
       dragOffsetRef.current = {
@@ -145,7 +149,7 @@ export const Window = ({
           borderColor: 'hsl(var(--glass-border) / 0.5)',
           background: 'linear-gradient(to bottom, hsl(var(--glass-bg) / 0.9), hsl(var(--glass-bg) / 0.8))',
           backdropFilter: 'blur(20px)',
-          cursor: isMaximized || (isMobile && mobileModal) ? 'default' : 'grab'
+          cursor: isMaximized || (isMobile && mobileModal) ? 'default' : isDragging ? 'grabbing' : 'grab'
         }}
         onMouseDown={handleMouseDown}
       >
