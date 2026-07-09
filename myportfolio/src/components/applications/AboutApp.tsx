@@ -4,7 +4,7 @@ export const AboutApp = () => {
   const handleDownloadResume = () => {
     // In a real app, this would download the actual resume
     const link = document.createElement('a');
-    link.href = '/resumeSkk.pdf';
+    link.href = '/Resume3.pdf';
     link.download = 'SKResume.pdf';
     link.click();
   };

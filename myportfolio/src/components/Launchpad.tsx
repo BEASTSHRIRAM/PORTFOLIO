@@ -45,7 +45,7 @@ const launchpadItems: LaunchpadItem[] = [
   { id: 'github', title: 'GitHub', image: '/github.png', href: 'https://github.com/BEASTSHRIRAM', kind: 'external' },
   { id: 'linkedin', title: 'LinkedIn', image: '/linkedin.png', href: 'https://linkedin.com/in/sriramkulkarni7878', kind: 'external' },
   { id: 'email', title: 'Email', image: '/gmail.png', href: 'mailto:shrikulk20@gmail.com', kind: 'external' },
-  { id: 'resume', title: 'Resume', image: '/resumelogo.png', href: 'https://drive.google.com/file/d/1Ke74lav-fygrM6Y0fVgRN9SUKHIW2dC-/view?usp=sharing', kind: 'external' },
+  { id: 'resume', title: 'Resume', image: '/resumelogo.png', href: 'https://drive.google.com/file/d/16RF50v4FCSL74ZVNls-hn2AjsCZb4qfW/view?usp=sharing', kind: 'external' },
   { id: 'leetcode', title: 'LeetCode', image: '/leetcode.png', href: 'https://leetcode.com/u/shriramthebeast/', kind: 'external' },
   { id: 'codeforces', title: 'Codeforces', image: '/codeforces.jpg', href: 'https://codeforces.com/profile/Beast7878', kind: 'external' },
 ];
