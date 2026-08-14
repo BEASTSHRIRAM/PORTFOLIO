@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Rocket } from 'lucide-react';
 
 const BeastApp = () => {
   return (
@@ -33,10 +32,10 @@ const BeastApp = () => {
             I am Sriram Kulkarni
           </span>
         </h1>
-        <p className="text-sm sm:text-lg opacity-80 mb-2 sm:mb-3">Full Stack Developer &amp; AI Enthusiast</p>
+        <p className="text-sm sm:text-lg opacity-80 mb-2 sm:mb-3">AI Engineer Intern at Zysk Technologies</p>
         <p className="max-w-lg text-xs sm:text-sm opacity-70 leading-relaxed px-2">
-          I build scalable, AI driven applications using Modern Technologies. Currently pursuing B.E. in Information Science at JSSATE, Bengaluru. Passionate
-          about turning ideas into polished products from backend APIs to pixel perfect UIs.
+          I build practical AI products and intelligent workflows focused on real-world impact. Currently working as an AI Engineer Intern at Zysk Technologies,
+          exploring modern GenAI systems, agentic workflows, and production-ready integrations that turn ideas into useful software.
         </p>
       </motion.div>
 

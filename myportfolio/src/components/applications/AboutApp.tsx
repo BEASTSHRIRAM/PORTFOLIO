@@ -20,8 +20,8 @@ export const AboutApp = () => {
               SK
             </div>
             
-            <h2 className="text-2xl font-bold mb-2">Shriram Kulkarni</h2>
-            <p className="text-primary mb-4">Full Stack Developer & AI Enthusiast</p>
+            <h2 className="text-2xl font-bold mb-2">Sriram Kulkarni</h2>
+            <p className="text-primary mb-4">AI Engineer Intern at Zysk Technologies</p>
             
             <div className="space-y-2 text-sm opacity-80 mb-6">
               <div className="flex items-center justify-center gap-2">
@@ -30,7 +30,7 @@ export const AboutApp = () => {
               </div>
               <div className="flex items-center justify-center gap-2">
                 <Calendar size={16} />
-                Student at JSS Academy of Technical Education
+                Building AI products and practical GenAI workflows
               </div>
             </div>
             
@@ -50,20 +50,17 @@ export const AboutApp = () => {
             <h3 className="text-xl font-semibold mb-4">About Me</h3>
             <div className="space-y-4 text-base leading-relaxed opacity-90">
               <p>
-                I'm a passionate developer currently pursuing my B.E. in Information Science at JSS Academy 
-                of Technical Education, Bengaluru with a CGPA of 8.2. I'm deeply interested in building 
-                scalable AI-driven solutions that solve real-world problems.
+                I am Sriram Kulkarni, currently working as an AI Engineer Intern at Zysk Technologies. I enjoy building
+                AI-powered products and practical solutions that combine software engineering with real-world problem solving.
               </p>
               <p>
-                My technical journey is marked by a strong foundation in both traditional software 
-                development and cutting-edge AI technologies. I've developed several notable projects 
-                including Briefify AI and BeastFitness AI, which showcase my ability to integrate 
-                modern technologies like Spring Boot, React, and various AI tools.
+                My work focuses on AI-driven experiences, intelligent workflows, and integrations that connect modern GenAI capabilities
+                with user-facing applications and backend systems. I enjoy turning ideas into polished, usable products with a strong emphasis on
+                impact and usability.
               </p>
               <p>
-                When I'm not coding, you can find me playing football, working on my fitness, or 
-                exploring new places. I'm fluent in English, Kannada (native), and Hindi, which 
-                helps me collaborate effectively in diverse team settings.
+                Beyond work, I stay curious about product thinking, software architecture, and emerging AI trends. I like building, learning,
+                and collaborating with teams that value experimentation and execution.
               </p>
             </div>
           </div>

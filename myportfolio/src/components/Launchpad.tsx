@@ -36,6 +36,7 @@ interface LaunchpadProps {
 const launchpadItems: LaunchpadItem[] = [
   // Portfolio apps
   { id: 'projects', title: 'Projects', icon: FolderOpen, iconColor: '#f97316', kind: 'app' },
+  { id: 'experience', title: 'Experience', icon: Calendar, iconColor: '#8b5cf6', kind: 'app' },
   { id: 'certifications', title: 'Certifications', icon: Award, iconColor: '#eab308', kind: 'app' },
   { id: 'involvements', title: 'Involvements', icon: Calendar, iconColor: '#6366f1', kind: 'app' },
   { id: 'skills', title: 'Skills', icon: Code, iconColor: '#3b82f6', kind: 'app' },

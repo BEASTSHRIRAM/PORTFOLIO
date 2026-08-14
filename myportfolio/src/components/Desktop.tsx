@@ -18,6 +18,7 @@ import { SleepScreen } from './SleepScreen';
 import { ProjectsApp } from './applications/ProjectsApp';
 import { SkillsApp } from './applications/SkillsApp';
 import { EducationApp } from './applications/EducationApp';
+import { ExperienceApp } from './applications/ExperienceApp';
 import { AboutApp } from './applications/AboutApp';
 import { CertificationsApp } from './applications/CertificationsApp';
 import { InvolvementsApp } from './applications/InvolvementsApp';
@@ -185,6 +186,7 @@ export const Desktop = () => {
     (appId: string) => {
       const all: { id: string; label: string; component: JSX.Element }[] = [
         { id: 'projects', label: 'Projects', component: <ProjectsApp /> },
+        { id: 'experience', label: 'Experience', component: <ExperienceApp /> },
         { id: 'certifications', label: 'Certifications', component: <CertificationsApp /> },
         { id: 'involvements', label: 'Involvements', component: <InvolvementsApp /> },
         { id: 'skills', label: 'Skills', component: <SkillsApp /> },
@@ -363,6 +365,7 @@ export const Desktop = () => {
             // Fallback: portfolio apps from Launchpad
             const portfolioApp = [
               { id: 'projects', label: 'Projects', component: <ProjectsApp /> },
+              { id: 'experience', label: 'Experience', component: <ExperienceApp /> },
               { id: 'certifications', label: 'Certifications', component: <CertificationsApp /> },
               { id: 'involvements', label: 'Involvements', component: <InvolvementsApp /> },
               { id: 'skills', label: 'Skills', component: <SkillsApp /> },
